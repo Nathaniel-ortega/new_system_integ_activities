@@ -18,6 +18,10 @@
 
 <script lang="ts" setup>
 //@ts-nocheck
+definePageMeta({ 
+  middleware: 'auth'
+})
+
 const config = useRuntimeConfig();
 
 declare global {
@@ -46,6 +50,10 @@ const loginWithGoogle = () => {
     },
   });
   client.requestAccessToken();
+   localStorage.setItem("google_user", JSON.stringify(userInfo));
+      localStorage.setItem("google_token", respone.access_token);
+
+      navigateTo("/");
 };
 </script>
 
