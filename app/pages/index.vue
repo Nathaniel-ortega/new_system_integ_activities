@@ -1,24 +1,19 @@
 <template>
   <div>
- 
+
+    <!-- Profile Card -->
     <v-card style="max-width: 400px; margin: 50px auto; padding: 20px">
-      
-      <!-- Profile Picture -->
+
       <v-avatar size="120" class="mb-4">
-        <v-img
-          :src="user?.picture"
-          alt="Profile Picture"
-        />
+        <v-img :src="user?.picture" alt="Profile Picture" />
       </v-avatar>
 
-      <!-- Welcome Text -->
       <h1 class="text-h4 font-weight-bold mb-2">
         Welcome Back 👋
       </h1>
 
-      <v-divider class="my-4"></v-divider>
+      <v-divider class="my-4" />
 
-      <!-- User Information -->
       <h2 class="text-h5 font-weight-medium">
         {{ user?.name || user?.displayName }}
       </h2>
@@ -27,7 +22,13 @@
         {{ user?.email }}
       </p>
 
-      <!-- Logout Button -->
+      <!-- Map -->
+    <div style="max-width: 900px; margin: 40px auto;">
+      <ClientOnly>
+        <Map />
+      </ClientOnly>
+    </div>
+
       <v-btn
         color="error"
         size="large"
@@ -38,46 +39,40 @@
       >
         Logout
       </v-btn>
-   
+
     </v-card>
-  
+
+    
+
   </div>
 </template>
 
-<script lang="ts" setup>
-// @ts-nocheck
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 
-import { onMounted } from "vue"
-
-definePageMeta({ 
+definePageMeta({
   middleware: 'auth'
 })
 
-
-const logout = () => { 
-  localStorage.removeItem('google_user')
-  localStorage.removeItem('google_token')
-  window.google?.accounts.id.disableAutoSelect()
-  navigateTo('/login')
-}
-
 const user = ref<any>(null)
-onMounted(() => { 
+
+onMounted(() => {
   const savedUser = localStorage.getItem('google_user')
 
-  if (!savedUser){ 
+  if (!savedUser) {
     navigateTo('/login')
     return
   }
 
-
   user.value = JSON.parse(savedUser)
 })
 
+const logout = () => {
+  localStorage.removeItem('google_user')
+  localStorage.removeItem('google_token')
+
+  window.google?.accounts.id.disableAutoSelect()
+
+  navigateTo('/login')
+}
 </script>
-
-
-
-<style>
-
-</style>
