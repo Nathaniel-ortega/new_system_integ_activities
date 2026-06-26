@@ -50,7 +50,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
-
+definePageMeta({
+  middleware: 'auth'
+})
 
 const user = ref<any>(null)
 
